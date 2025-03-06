@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 use App\Entity\Article;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,7 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'article_list')]
@@ -22,12 +22,13 @@ class IndexController extends AbstractController
         return $this->render('articles/index.html.twig', ['articles' => $articles]);
     }
 
-    #[Route('/article/{id}', name: 'article_details')]
-    public function articleDetails(int $id)
-    {
-        // Logique pour récupérer l'article avec l'ID (peut être une récupération en base de données)
-        return new Response("Détails de l'article #$id");
-    }
+    /* #[Route('/article/{id}', name: 'article_details')]
+     public function articleDetails(int $id)
+     {
+
+         return new Response("Détails de l'article #$id");
+     }
+ */
     #[Route('/article/save', name: 'article_save')]
     public function save(EntityManagerInterface $entityManager): Response
     {
@@ -126,7 +127,7 @@ class IndexController extends AbstractController
     }
 
 
-    #[Route('/article/delete/{id}', name: 'delete_article', methods: ['DELETE'])]
+    #[Route('/article/delete/{id}', name: 'delete_article', methods: ['GET'])]
     public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
         // Récupérer l'article à partir de l'ID
@@ -144,4 +145,5 @@ class IndexController extends AbstractController
         // Rediriger vers la liste des articles
         return $this->redirectToRoute('article_list');
     }
+
 }
